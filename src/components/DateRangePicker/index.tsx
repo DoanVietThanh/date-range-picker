@@ -3,20 +3,20 @@ import { ChangeEvent, useState } from "react";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import Separator from "../Separator";
 import MonthCalendar from "./month-calendar";
+import { SelectedDate } from "../../types/selected-date";
+import DateRangeValue from "./date-range-value";
 
 const DateRangePicker = () => {
   const [monthValue, setMonthValue] = useState(new Date().getMonth() + 1);
   const [yearValue, setYearValue] = useState(new Date().getFullYear());
-  const [cusColor, setCusColor] = useState<string>(localStorage.getItem("cusColor") || "#0000FF");
+  const [cusColor, setCusColor] = useState<string>(localStorage.getItem("cusColor") || "#00000");
   const [tableName, setTableName] = useState<string>(localStorage.getItem("tableName") || "Custom Date Range Picker");
 
-  const [selectedDate, setSelectedDate] = useState<{ startDate: string; endDate: string; selectingStartDate: boolean }>(
-    {
-      startDate: moment(new Date()).format("YYYY-MM-DD"),
-      endDate: moment(new Date()).format("YYYY-MM-DD"),
-      selectingStartDate: true,
-    }
-  );
+  const [selectedDate, setSelectedDate] = useState<SelectedDate>({
+    startDate: "",
+    endDate: "",
+    selectingStartDate: true,
+  });
 
   const handleIncrementMonth = () => {
     if (monthValue < 12) {
@@ -51,17 +51,19 @@ const DateRangePicker = () => {
   return (
     <div className="h-[100vh] w-[100vw] flex justify-center items-center overflow-hidden bg-gray-500">
       <div className="h-[80vh] w-[90vw] rounded-md p-8 bg-white overflow-hidden">
-        <div className="text-xl font-semibold">
-          <input
-            type="text"
-            value={tableName}
-            placeholder="Enter table name..."
-            className="border w-[360px] mr-4 p-2 rounded-md"
-            onChange={(e) => handleChangeTableName(e)}
-          />
-          {moment(new Date()).format("DD/MM/YYYY (dddd)")}
+        <div className="flex items-center justify-between">
+          <div className="text-xl font-semibold">
+            <input
+              type="text"
+              value={tableName}
+              placeholder="Enter table name..."
+              className="border w-[360px] mr-4 p-2 rounded-md"
+              onChange={(e) => handleChangeTableName(e)}
+            />
+            {moment(new Date()).format("DD/MM/YYYY (dddd)")}
+          </div>
+          <DateRangeValue selectedDate={selectedDate} />
         </div>
-
         <div className="h-full flex flex-col justify-between">
           <div className="flex items-center border-t-2 w-full py-4 mt-2 gap-4">
             <FaArrowAltCircleLeft size={40} color="blue" className="cursor-pointer" onClick={handleDecrementMonth} />
@@ -84,6 +86,7 @@ const DateRangePicker = () => {
             </div>
             <FaArrowAltCircleRight size={40} color="blue" className="cursor-pointer" onClick={handleIncrementMonth} />
           </div>
+
           <div className="mb-4 p-4">
             <div className="flex items-center gap-4">
               <label htmlFor="custom-color" className="cursor-pointer font-semibold text-xl">
