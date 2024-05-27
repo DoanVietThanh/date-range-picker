@@ -5,6 +5,7 @@ import Separator from "../Separator";
 import MonthCalendar from "./month-calendar";
 import { SelectedDate } from "../../types/selected-date";
 import DateRangeValue from "./date-range-value";
+import { MONTH_OF_YEAR, STEP_OF_MONTH } from "../../constanst/days";
 
 const DateRangePicker = () => {
   const [monthValue, setMonthValue] = useState(new Date().getMonth() + 1);
@@ -19,8 +20,8 @@ const DateRangePicker = () => {
   });
 
   const handleIncrementMonth = () => {
-    if (monthValue < 12) {
-      setMonthValue(monthValue + 2);
+    if (monthValue < MONTH_OF_YEAR) {
+      setMonthValue(monthValue + STEP_OF_MONTH);
     } else {
       setMonthValue(1);
       setYearValue(yearValue + 1);
@@ -29,9 +30,9 @@ const DateRangePicker = () => {
 
   const handleDecrementMonth = () => {
     if (monthValue > 1) {
-      setMonthValue(monthValue - 2);
+      setMonthValue(monthValue - STEP_OF_MONTH);
     } else {
-      setMonthValue(12);
+      setMonthValue(MONTH_OF_YEAR);
       setYearValue(yearValue - 1);
     }
   };
@@ -77,8 +78,8 @@ const DateRangePicker = () => {
               />
               <Separator color="gray-500" />
               <MonthCalendar
-                monthValue={monthValue == 12 ? 1 : monthValue + 1}
-                yearValue={monthValue == 12 ? yearValue + 1 : yearValue}
+                monthValue={monthValue == MONTH_OF_YEAR ? 1 : monthValue + 1}
+                yearValue={monthValue == MONTH_OF_YEAR ? yearValue + 1 : yearValue}
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
                 cusColor={cusColor}
